@@ -53,7 +53,31 @@ Route::post('/profile/popupmodal/photochange',[ProfileController::class, 'photoc
 
 
 
+//ADD MONEY
 
+Route::get('/addmoney',[AddmoneyController::class, 'index'])->name('addmoney');
+Route::post('/addmoney/insert',[AddmoneyController::class, 'insert']);
+
+// ADD MEAL
+Route::get('/addmeal',[AddmealController::class, 'index'])->name('addmeal');
+Route::get('/addmeal/bymanager/{user_id}',[AddmealController::class, 'addbymanager']);
+Route::post('/general/addmeal',[AddmealController::class, 'insert']);
+Route::post('/bymanager/addmeal',[AddmealController::class, 'insertbymanager']);
+
+//ADD Daily Cost
+Route::get('/addcost',[AddcostController::class, 'index'])->name('addcost');
+Route::post('/cost/insert',[AddcostController::class, 'insert']);
+
+
+//Package
+Route::get('/package',[PackageController::class, 'index'])->name('package');
+Route::post('/addpackage',[PackageController::class, 'insert']);
+Route::get('/package/delete/{package_id}',[PackageController::class, 'packagedelete']);
+
+
+//Order Request
+Route::get('/order/{package_id}',[OrderRequestController::class, 'index'])->name('order');
+Route::post('/orderrequest',[OrderRequestController::class, 'insert']);
 
 
 
