@@ -10,7 +10,7 @@ use App\Http\Controllers\AddmealController;
 use App\Http\Controllers\AddcostController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\SslCommerzPaymentController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,13 +22,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/',[FrontendController::class, 'index'])->name('home');
+Route::get('/',[FrontendController::class, 'index']);
 
 // Route::get('/dashboard', function () {
 //     $cars = ['a','s','d','f','g'];
 //     return view('dashboard',compact('cars'));
 // })->middleware(['auth', 'verified'])->name('dashboard');
-Route::get('/dashboard',[HomeController::class, 'index'])->middleware(['auth','verified'])->name('dashboard');
+Route::get('/dashboard',[HomeController::class, 'index'])->middleware(['auth','verified'])->name('name');
 Route::post('/user/insertbymanager',[HomeController::class, 'insertbymanager']);
 Route::post('/user/insertbyadmin',[HomeController::class, 'insertbyadmin']);
 Route::get('/user/delete/{user_id}',[HomeController::class, 'delete']);
@@ -51,17 +51,32 @@ Route::post('/profile/popupmodal/editname',[ProfileController::class, 'namechang
 Route::post('/profile/popupmodal/editpassword',[ProfileController::class, 'passwordchange']);
 Route::post('/profile/popupmodal/photochange',[ProfileController::class, 'photochange']);
 
+//ADD MONEY
+
+Route::get('/addmoney',[AddmoneyController::class, 'index'])->name('addmoney');
+Route::post('/addmoney/insert',[AddmoneyController::class, 'insert']);
+
+// ADD MEAL
+Route::get('/addmeal',[AddmealController::class, 'index'])->name('addmeal');
+Route::get('/addmeal/bymanager/{user_id}',[AddmealController::class, 'addbymanager']);
+Route::post('/general/addmeal',[AddmealController::class, 'insert']);
+Route::post('/bymanager/addmeal',[AddmealController::class, 'insertbymanager']);
 
 
+//ADD Daily Cost
+Route::get('/addcost',[AddcostController::class, 'index'])->name('addcost');
+Route::post('/cost/insert',[AddcostController::class, 'insert']);
 
 
+//Package
+Route::get('/package',[PackageController::class, 'index'])->name('package');
+Route::post('/addpackage',[PackageController::class, 'insert']);
+Route::get('/package/delete/{package_id}',[PackageController::class, 'packagedelete']);
 
 
-
-
-
-
-
+//Order Request
+Route::get('/order/{package_id}',[OrderRequestController::class, 'index'])->name('order');
+Route::post('/orderrequest',[OrderRequestController::class, 'insert']);
 
 //check
 Route::get('/check', function () {
@@ -73,6 +88,9 @@ Route::get('/check', function () {
 
 Route::get('/mail/send/{user_id}', [HomeController::class, 'mailsend']);
 
+//send mail 
+Route::get('/sendmail', [AddmealController::class, 'sendmail']);
+Route::get('/sendmail/send/{user_id}/{a}/{b}/{c}/{d}/{e}/{f}/{g}/{h}/{i}', [AddmealController::class, 'mail']);
 
 
 
@@ -104,3 +122,19 @@ Route::get('/posts',function(){
 
 });
 require __DIR__.'/auth.php';
+
+
+
+// SSLCOMMERZ Start
+Route::get('/example1', [SslCommerzPaymentController::class, 'exampleEasyCheckout']);
+Route::get('/example2', [SslCommerzPaymentController::class, 'exampleHostedCheckout']);
+
+Route::post('/pay', [SslCommerzPaymentController::class, 'index']);
+Route::post('/pay-via-ajax', [SslCommerzPaymentController::class, 'payViaAjax']);
+
+Route::post('/success', [SslCommerzPaymentController::class, 'success']);
+Route::post('/fail', [SslCommerzPaymentController::class, 'fail']);
+Route::post('/cancel', [SslCommerzPaymentController::class, 'cancel']);
+
+Route::post('/ipn', [SslCommerzPaymentController::class, 'ipn']);
+//SSLCOMMERZ END

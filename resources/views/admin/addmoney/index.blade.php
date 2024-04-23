@@ -22,7 +22,7 @@
                         <tr>
                             <td>{{ $loop->index+1 }}</td>
                             {{-- <td>{{ $mambers->firstitem()+$index }}</td> --}}
-                            <td>{{ App\Models\User::find($mamber->user_id)->name }}</td>
+                            <td>{{ $member_name_list[$loop->index] }}</td>
                             <td>{{ $mamber->amount }}</td>
                             <td>{{ $mamber->created_at->format('d-m-y h:i:s A') }}</td>
                         </tr>
@@ -31,7 +31,7 @@
                         @endforelse
 
                       </table>
-                      {{-- {{ $mambers->links() }} --}}
+                      
                       {{-- {{ $categories }} --}}
                       <table class="table table-success table-striped table-hover">
                         <tr>
@@ -41,40 +41,32 @@
                             <th>Total Amount</th>
 
                         </tr>
-
+                        
                         @foreach ($categories as $index=>$category)
                         @php
-
-                            $value = App\Models\Addmoney::all()->where('user_id' ,'==',$category)->where('company' ,'==',$user_company)->sum('amount');
-                            $adds = App\Models\Addmoney::all()->where('month', '!=',$monthnumber);
-                            foreach ($adds as $add) {
-                                    $add->delete();
-                                }
+                            
+                            $value = $value_list[$loop->index];
+                            
 
                         @endphp
-                        {{-- $value = Select sum('amount') From Addmoney Where company = $user_company and user_id = $category;
-                        $adds = Select * From Addmoney Where month != $monthnumber;
-                        foreach ($adds as $add) {
-                            Delete From Addmoney Where id = $add['id']
-                        }
-                        --}}
+                        
 
                         @if ($value  != NUll)
                         <tr>
                             <td>{{ $loop->index+1 }}</td>
-                            <td>{{ App\Models\User::find($category)->name }}</td>
-
-                            <td>{{ App\Models\Addmoney::all()->where('user_id' ,'==',$category)->where('company' ,'==',$user_company)->sum('amount') }}</td>
+                            <td>{{ $category_name_list[$loop->index] }}</td>
+                            
+                            <td>{{ $sum_list[$loop->index]}}</td>
                         </tr>
-                         {{-- Select sum('amount') From Addmoney Where company = $user_company and user_id = $category;  --}}
+                         
                         @endif
                         @endforeach
                         <tr>
                             <td></td>
                             <td><h5>TOTAL:</h5></td>
-                            <td>{{ App\Models\Addmoney::all()->where('company' ,'==',$user_company)->sum('amount') }}</td>
+                            <td>{{ $total }}</td>
                         </tr>
-                        {{-- Select sum('amount') From Addmoney Where company = $user_company ;  --}}
+                        
                       </table>
 
 

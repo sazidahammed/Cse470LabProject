@@ -17,8 +17,8 @@
                     </div><!-- card-header -->
                     <div class="d-flex align-items-center justify-content-between">
                       <h5 style="color:#F6F6F6">Total Money :</h5>
-                      <h3 class="mg-b-0 tx-white tx-lato tx-bold">{{  App\Models\Addmoney::all()->where('company' ,'==',$user_company)->sum('amount') }}</h3>
-                       {{-- Select SUM('amount') From Addmoney Where company = $user_company; --}}
+                      <h3 class="mg-b-0 tx-white tx-lato tx-bold">{{  $total_money }}</h3>
+                       
                     </div><!-- card-body -->
                     <div class="d-flex align-items-center justify-content-between mg-t-15 bd-t bd-white-2 pd-t-10">
                       <div>
@@ -38,8 +38,8 @@
                     </div><!-- card-header -->
                     <div class="d-flex align-items-center justify-content-between">
                         <h5 style="color:#F6F6F6">Cost :</h5>
-                      <h3 class="mg-b-0 tx-white tx-lato tx-bold">{{ App\Models\Addcost::all()->where('company' ,'==',$user_company)->sum('dailycost') }}</h3>
-                      {{-- Select SUM('dailycost') From Addcost Where company = $user_company; --}}
+                      <h3 class="mg-b-0 tx-white tx-lato tx-bold">{{ $cost }}</h3>
+                      
                     </div><!-- card-body -->
                     <div class="d-flex align-items-center justify-content-between mg-t-15 bd-t bd-white-2 pd-t-10">
                       <div>
@@ -59,8 +59,8 @@
                     </div><!-- card-header -->
                     <div class="d-flex align-items-center justify-content-between">
                         <h5 style="color:#F6F6F6;">Rest Money :</h5>
-                      <h3 class="mg-b-0 tx-white tx-lato tx-bold">{{ App\Models\Addmoney::all()->where('company' ,'==',$user_company)->sum('amount') - App\Models\Addcost::all()->where('company' ,'==',$user_company)->sum('dailycost')}}</h3>
-                       {{--Select SUM('amount') From Addmoney Where company = $user_company - Select SUM('dailycost') From Addcost Where company = $user_company; --}}
+                      <h3 class="mg-b-0 tx-white tx-lato tx-bold">{{ $rest_money}}</h3>
+                       
                     </div><!-- card-body -->
                     <div class="d-flex align-items-center justify-content-between mg-t-15 bd-t bd-white-2 pd-t-10">
                       <div>
@@ -82,13 +82,10 @@
                         <h5 style="color:#F6F6F6;">Rate :</h5>
                       <h3 class="mg-b-0 tx-white tx-lato tx-bold">
                         @if ($total_meal != 0)
-                          @php
-                              $meal_round = App\Models\Addcost::all()->where('company' ,'==',$user_company)->sum('dailycost')/$total_meal;
-                               $meal_rate = round($meal_round, 2);
-                          @endphp
+                          
                         {{ $meal_rate }}
                         @endif
-                         {{-- Select SUM('dailycost') From Addcost Where company = $user_company ;/$total_meal --}}
+                         
                       </h3>
                     </div><!-- card-body -->
                     <div class="d-flex align-items-center justify-content-between mg-t-15 bd-t bd-white-2 pd-t-10">
@@ -132,23 +129,21 @@
                                             </div>
                                             @php
                                                 if($x < 10){
-                                                    $date_check = "0".$x."-".$monthnumber."-".now()->year;
+                                                    $date_check = $date_check_array[$x-1];
                                                 }else{
-                                                    $date_check = $x."-".$monthnumber."-".now()->year;
+                                                    $date_check = $date_check_array[$x-1];
                                                 }
-                                                $db_dates = App\Models\Addcost::all()->where('user_id' ,'==',Auth::user()->id)->where('date', "==", $date_check)->where('company', "==", Auth::user()->company);
-                                                $costs = App\Models\Addcost::all()->where('month', '!=',$monthnumber);
-                                                 foreach ($costs as $cost) {
+                                                $db_dates =$db_dates_array[$x-1];
+                                                
+                                                
+                                                $costs = $costs_array[$x-1];
+                                                
+                                                foreach ($costs as $cost) {
                                                     $cost->delete();
                                                  }
 
                                             @endphp
-                                            {{-- $db_dates = Select * From Addcost Where company = $user_company and user_id = $user_id and date = $date_check;
-                                            $costs = Select * From Addcost Where month != $monthnumber;
-                                            foreach ($costs as $cost) {
-                                                Delete From Addcost Where id = $cost['id']
-                                             }
-                                             --}}
+                                           
 
                                             <input name="month" type="hidden" class="visually-hidden" id="ex1" value="{{ $monthnumber }}" required >
 
@@ -165,7 +160,7 @@
                                             </div>
                                             <div class="col-lg-2">
                                                 <select name='marketby' class="form-control" required>
-                                                    <option value="{{ $db_date->marketby }}">{{ App\Models\User::find($db_date->marketby)->name }}</option>
+                                                    <option value="{{ $db_date->marketby }}">{{ $marketby_name_array[$x-1] }}</option>
                                                     @foreach ($members as $member)
                                                     <option value="{{ $member->id }}">{{ $member->name }}</option>
                                                     @endforeach

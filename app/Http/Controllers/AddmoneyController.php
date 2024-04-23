@@ -17,23 +17,72 @@ class AddmoneyController extends Controller
     public function index()
     {
        $user_company = Auth::user()->company;
-       //$user_company = $_SESSION["company"];
-        //  $users = User::where('company' ,'==',$user_company)->get()->toArray();
         $users = User::all()->where('company' ,'==',$user_company);
-        //$users = Select * From Users Where company = $user_company;
-        //    print_r($users);
         $mambers = Addmoney::all()->where('company' ,'==',$user_company);
-        //$mambers = Select * From Addmoney Where company = $user_company;
-        // print_r($mambers);
-        $categories = Addmoney::groupBy('user_id')->pluck('user_id');
-        //$categories = Select * From Addmoney Group By user_id;
+
+        $categories = Addmoney::groupBy('user_id')->pluck('user_id');// individual unique persons of that company (set of users)
+
+
+        
         $now = Carbon::now();
         $monthnumber = $now->format('m');
-       return view('admin.addmoney.index',compact('users','mambers','categories','user_company','monthnumber'));
+
+
+        $member_name_list=[];
+        foreach ($mambers as $index=>$mamber){
+
+            $member_name=User::find($mamber->user_id)->name;
+            array_push($member_name_list,$member_name);
+        }
+
+
+
+
+
+        $value_list=[];
+        $category_name_list=[];
+        $sum_list=[];
+
+        
+        foreach ($categories as $index=>$category){
+            
+            $value = Addmoney::all()->where('user_id' ,'==',$category)->where('company' ,'==',$user_company)->sum('amount');
+            
+            array_push($value_list,$value);
+            $adds = Addmoney::all()->where('month', '!=',$monthnumber);
+            foreach ($adds as $add) {
+                    $add->delete();
+                }
+            
+            if ($value  != NUll){
+                $category_name=User::find($category)->name;
+                array_push($category_name_list,$category_name);
+
+                $sum=Addmoney::all()->where('user_id' ,'==',$category)->where('company' ,'==',$user_company)->sum('amount');
+                array_push($sum_list,$sum);
+
+              
+                
+            }
+            else{
+                array_push($sum_list,'None');
+                array_push($category_name_list,'None');
+
+            }
+
+            
+        }
+        
+        
+
+        $total=Addmoney::all()->where('company' ,'==',$user_company)->sum('amount');
+
+
+       return view('admin.addmoney.index',compact('value_list','member_name_list','total','category_name_list','sum_list','users','mambers','categories','user_company','monthnumber'));
 
     }
     function insert(Request $request){
-        print_r($request->all());
+        
         Addmoney::insert([
             'user_id'=>$request->user_id,
             'company'=>Auth::user()->company,
@@ -46,20 +95,3 @@ class AddmoneyController extends Controller
 }
 
 
-// if(isset($request["user_id"]) &&  isset($_SESSION["company"]) && isset($request['amount']) && isset($request['month'])){
-        // 	// write the query to check if this username and password exists in our database
-        //  $id = $request['user_id'],
-        // 	$company = $_SESSION["company"];
-        // 	$amount = $request['amount'];
-        // 	$month = $request['month'];
-        // 	$created_at = Carbon::now();
-
-        // 	$sql = " INSERT INTO User VALUES('$id','$company', '$amount', '$month','$created_at' ) ";
-
-        // 	//Execute the query
-        // 	$result = mysqli_query($conn, $sql);
-
-        // 	//check if this insertion is happening in the database
-
-
-        // }

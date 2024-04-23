@@ -4,115 +4,88 @@
 
 
 <div class="container">
-    {{-- <div class="row">
-        <div class="col-lg-12">
-            <div class="row"><div class="col-lg-6">
-                <div class="card">
-                    <div class="card-header">
+<div class="row row-sm">
+                <div class="col-sm-4 col-xl-4">
+                    <div class="card pd-20 bg-primary">
+                      <div class="d-flex justify-content-between align-items-center mg-b-10">
+                        <h6 class="tx-11 tx-uppercase mg-b-0 tx-spacing-1 tx-white">{{ Auth::user()->name }} Your Package</h6>
+                        <a href="" class="tx-white-8 hover-white"><i class="icon ion-android-more-horizontal"></i></a>
+                      </div><!-- card-header -->
+                      <div class="d-flex align-items-center justify-content-between">
+                        @if (Auth::user()->type == 91)
+                        @foreach ($meal_package as $value )
+                        <h5 style="color:#F6F6F6" class="tx-18">Package Name :{{ App\Models\Package::find($value->package_id)->package_name }}</h5>
+                        <h5 style="color:#F6F6F6" class="tx-18">Package Rate :BDT{{ App\Models\Package::find($value->package_id)->package_price }}</h5>
 
-                    </div>
-                    <div class="card-body">
-                        @for ($x = 01; $x <=15 ; $x++)
+                        @endforeach
+                         @endif
 
-                        <form action="{{ url('/general/addmeal') }}" method="POST">
-                            @csrf
-                            <div class="form-group row">
+                        {{-- <h3 class="mg-b-0 tx-white tx-lato tx-bold">{{  App\Models\Addmoney::all()->where('company' ,'==',$user_company)->sum('amount') }}</h3> --}}
+                      </div><!-- card-body -->
+                      <div class="d-flex align-items-center justify-content-between mg-t-15 bd-t bd-white-2 pd-t-10">
+                        <div>
 
-                                <div class="col-lg-3">
-                                    <label for="" class="form-label-control" > {{ $x }}-{{ $monthName }}-{{ now()->year }} </label>
-                                    <input name="currentdate" type="hidden" class="visually-hidden" id="ex1" value="{{ $x }}-{{ $monthName }}-{{ now()->year }}" >
-                                </div>
-                                @php
-                                    $date_check = $x."-".$monthName."-".now()->year;
-                                    $db_dates = App\Models\Addmeal::all()->where('user_id' ,'==',Auth::user()->id)->where('date', "==", $date_check);
-                                    $db_dates_lunch = App\Models\Addmeal::all()->where('user_id' ,'==',Auth::user()->id)->where('date', "==", $date_check);
+                        </div>
+                        <div>
 
-                                @endphp
+                        </div>
+                      </div><!-- -->
+                    </div><!-- card -->
+                  </div><!-- col-3 -->
+                <div class="col-sm-4 col-xl-4">
+                    <div class="card pd-20 bg-primary">
+                      <div class="d-flex justify-content-between align-items-center mg-b-10">
+                        <h6 class="tx-11 tx-uppercase mg-b-0 tx-spacing-1 tx-white">About Your Meal</h6>
+                        <a href="" class="tx-white-8 hover-white"><i class="icon ion-android-more-horizontal"></i></a>
+                     
 
-                                @foreach ($db_dates as $db_date)
-                                       @if ($date_check == $db_date->date )
-                                       <div class="col-lg-3">
-                                           <input name="lunch" class="form-control" id="ex1"  value="{{ $db_date->lunch }}" type=number  min="0" step='.5'>
-                                       </div>
-                                       <div class="col-lg-3">
-                                        <input name="dinner" class="form-control" id="ex1"  placeholder="Dinner" value="{{ $db_date->dinner }}" type="number" min="0" step=".5">
-                                        </div>
+                      </div><!-- card-header -->
+                      <div class="d-flex align-items-center justify-content-between">
+                        <h5 style="color:#F6F6F6" class="tx-18">Meal Number : {{ $total_meal_ofuser }}</h5>
+                        <h5 style="color:#F6F6F6" class="tx-18">Total  : BDT{{ $z  }}</h5>
+                        {{-- <h3 class="mg-b-0 tx-white tx-lato tx-bold">{{  App\Models\Addmoney::all()->where('company' ,'==',$user_company)->sum('amount') }}</h3> --}}
+                      </div><!-- card-body -->
+                      <div class="d-flex align-items-center justify-content-between mg-t-15 bd-t bd-white-2 pd-t-10">
+                        <div>
 
-                                       @endif
+                        </div>
+                        <div>
 
-                                @endforeach
-                                {{-- @foreach ($db_dates as $db_date)
-                                       @if ($date_check != $db_date->date )
+                        </div>
+                      </div><!-- -->
+                    </div><!-- card -->
+                  </div><!-- col-3 -->
+                  <div class="col-sm-4 col-xl-4">
+                    <div class="card pd-20 bg-primary">
+                      <div class="d-flex justify-content-between align-items-center mg-b-10">
+                        <h6 class="tx-11 tx-uppercase mg-b-0 tx-spacing-1 tx-white"> Your outstanding Balance</h6>
+                        <a href="" class="tx-white-8 hover-white"><i class="icon ion-android-more-horizontal"></i></a>
+                      </div><!-- card-header -->
+                      
+                      <div class="d-flex align-items-center justify-content-between">
+                        @if (Auth::user()->type == 91)
+                        @foreach ($meal_package as $value )
+                        <h5 style="color:#F6F6F6" class="tx-18">Total Due :BDT {{$due}}</h5>
+                        <h5 style="color:#F6F6F6" class="tx-18">Deposited :BDT {{$remaining_deposits}}</h5>
 
+                        @endforeach
+                         @endif
 
-                                       @endif
+                        {{-- <h3 class="mg-b-0 tx-white tx-lato tx-bold">{{  App\Models\Addmoney::all()->where('company' ,'==',$user_company)->sum('amount') }}</h3> --}}
+                      </div><!-- card-body -->
+                      <div class="d-flex align-items-center justify-content-between mg-t-15 bd-t bd-white-2 pd-t-10">
+                        <div>
 
-                                @endforeach
+                        </div>
+                        <div>
 
-                                    @if (count($db_dates) == 0)
-                                    <div class="col-lg-3">
-                                        <input name="lunch" placeholder="lunch" class="form-control" id="ex1"  type="number" min="0" step='.5'>
-                                    </div>
-                                    <div class="col-lg-3">
-                                        <input name="dinner" class="form-control" id="ex1"  placeholder="Dinner" type="number" min="0" step=".5">
-                                    </div>
-                                    @endif
-                                <div class="col-lg-3">
-                                    <button type="submit" class="btn btn-primary">Confirm</button>
-                                </div>
-
-
-                            </div>
-                            <div class="form-group ">
-
-                            </div>
-                        </form>
-
-                        @endfor
-                    </div>
-                </div>
+                        </div>
+                      </div><!-- -->
+                    </div><!-- card -->
+                  </div><!-- col-3 -->
             </div>
-            <div class="col-lg-6">
-                <div class="card">
-                    <div class="card-header">
-
-                    </div>
-                    <div class="card-body">
-                        @for ($x = 16; $x <= 30; $x++)
-
-                        <form action="{{ url('/general/addmeal') }}" method="POST">
-                            @csrf
-                            <div class="form-group row">
-
-                                <div class="col-lg-3">
-                                    <label for="" class="form-label-control" > {{ $x }}-{{ $monthName }}-{{ now()->year }} </label>
-                                    <input name="currentdate" type="hidden" class="visually-hidden" id="ex1" value="{{ $x }}-{{ $monthName }}-{{ now()->year }}" >
-                                </div>
-                                <div class="col-lg-3">
-                                    <input name="lunch" class="form-control" id="ex1" placeholder="Lunch" type="number" min="0" step='.5'>
-                                </div>
-                                <div class="col-lg-3">
-                                    <input name="dinner" class="form-control" id="ex1"  placeholder="Dinner" type="number" min="0" step=".5">
-                                </div>
-                                <div class="col-lg-3">
-                                    <button type="submit" class="btn btn-primary">Confirm</button>
-                                </div>
-
-
-                            </div>
-                            <div class="form-group ">
-
-                            </div>
-                        </form>
-
-                        @endfor
-                    </div>
-                </div>
-            </div></div>
-        </div>
-    </div> --}}
-    <div class="row">
-        <div class="col-lg-9">
+    <div class="row row-sm pt-4">
+        <div class="col-lg-8">
             <table class="table table-success table-striped table-hover">
                 <tr>
                     <th>SL</th>
@@ -142,6 +115,44 @@
                 {{-- Select sum('amount') from Addmoney where user_id = $user_id; --}}
 
               </table>
+        </div>
+        <div class="col-lg-4">
+        <div class="card pd-20 bg-primary">
+                      <div class="d-flex justify-content-between align-items-center mg-b-10">
+                        <h6 class="tx-11 tx-uppercase mg-b-0 tx-spacing-1 tx-white">Pay Now</h6>
+                        <a href="" class="tx-white-8 hover-white"><i class="icon ion-android-more-horizontal"></i></a>
+                      </div><!-- card-header -->
+                      <div class="d-flex align-items-center justify-content-between">
+                        @if (Auth::user()->type == 91)
+                        
+                        <h5 style="color:#F6F6F6" class="tx-18">Cash :Kindly ,contact the owner</h5>
+                        
+
+                        
+                         @endif
+
+                        
+                      </div><!-- card-body -->
+                      <div class="d-flex align-items-center justify-content-between">
+                        @if (Auth::user()->type == 91)
+                        
+                        
+                        <h5 style="color:#F6F6F6" class="tx-18">SSL Ecommerz : <a href="{{url('/example2')}}" class="btn btn-success">Cleck Here</a></h5>
+
+                        
+                         @endif
+
+                        
+                      </div><!-- card-body -->
+                      <div class="d-flex align-items-center justify-content-between mg-t-15 bd-t bd-white-2 pd-t-10">
+                        <div>
+
+                        </div>
+                        <div>
+
+                        </div>
+                      </div><!-- -->
+                    </div><!-- card -->
         </div>
     </div>
 </div>

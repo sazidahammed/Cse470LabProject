@@ -293,7 +293,7 @@
                     <tr>
                       <td>
                         <p>Hi there,</p>
-                        <p>Your MealDeal  Account info :</p>
+                        <p>Your MealDeal  Due Payment Info:</p>
                          @foreach($data as $info => $d)
 
                          @if ( $d == 11)

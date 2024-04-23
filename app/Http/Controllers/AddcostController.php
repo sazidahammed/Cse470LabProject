@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Addcost;
 use App\Models\Addmeal;
+use App\Models\Addmoney;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -36,7 +37,57 @@ class AddcostController extends Controller
         $today_dinner = Addmeal::all()->where('company' ,'==',$user_company)->where('date' ,'==',$date)->sum('dinner');
         //$today_dinner = Select SUM('dinner') From Addmeal Where date = $date and company = $user_company;
         $today_meal = $today_lunch + $today_dinner;
-        return view('admin.addcost.index',compact('date','month','monthName','members','monthnumber','user_company','total_meal','today_meal'));
+        $total_money=Addmoney::all()->where('company' ,'==',$user_company)->sum('amount');
+        $cost=Addcost::all()->where('company' ,'==',$user_company)->sum('dailycost');
+        $rest_money=Addmoney::all()->where('company' ,'==',$user_company)->sum('amount') - Addcost::all()->where('company' ,'==',$user_company)->sum('dailycost');
+        $meal_round = Addcost::all()->where('company' ,'==',$user_company)->sum('dailycost')/$total_meal;
+        $meal_rate = round($meal_round, 2);
+
+
+        $date_check_array=[];
+        $costs_array=[];
+        $db_dates_array=[];
+        $marketby_name_array=[];
+        
+        for ($x = 01; $x <=30 ; $x++){
+            if($x < 10){
+                $date_check = "0".$x."-".$monthnumber."-".now()->year;
+            }else{
+                $date_check = $x."-".$monthnumber."-".now()->year;
+            }
+            
+
+            array_push($date_check_array,$date_check);
+
+            $db_dates = Addcost::all()->where('user_id' ,'==',Auth::user()->id)->where('date', "==", $date_check)->where('company', "==", Auth::user()->company);
+            array_push($db_dates_array,$db_dates);
+
+            $costs = Addcost::all()->where('month', '!=',$monthnumber);
+            array_push($costs_array,$costs);
+
+            $loop_ran=False;
+            foreach ($db_dates as $db_date){
+                if ($date_check == $db_date->date){
+                    $loop_ran=True;
+                    $marketby_name=User::find($db_date->marketby)->name;
+
+                    array_push($marketby_name_array,$marketby_name);
+                }
+                
+
+            }
+            if ($loop_ran==False){
+                array_push($marketby_name_array,'Select Member');
+            }
+        
+                
+            
+
+        }
+        
+
+  
+        return view('admin.addcost.index',compact('marketby_name_array','db_dates_array','costs_array','date_check_array','total_money','cost','date','month','monthName','members','monthnumber','user_company','total_meal','today_meal','meal_rate','rest_money'));
     }
 
 

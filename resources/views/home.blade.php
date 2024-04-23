@@ -11,11 +11,11 @@
 
     <div class="sl-pagebody">
       <div class="sl-page-title">
-        {{-- $_SESSION["type"] == 22; --}}
-        @if (Auth::user()->role == 22)
-            @include('admin.parts.managerdashboard')
         {{-- $_SESSION["type"] == 33; --}}
-        @elseif(Auth::user()->role == 33)
+        @if (Auth::user()->role == 33)
+            @include('admin.parts.managerdashboard')
+        {{-- $_SESSION["type"] == 22; --}}
+        @elseif(Auth::user()->role == 22)
            @include('admin.parts.admindashboard')
         {{-- $_SESSION["type"] == 11; --}}
         @elseif(Auth::user()->role == 11)
